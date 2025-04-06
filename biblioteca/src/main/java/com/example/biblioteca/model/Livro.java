@@ -3,7 +3,7 @@ package com.example.biblioteca.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "livros") // Nome da tabela no banco de dados
+@Table(name = "livros")
 
 public class Livro {
 
@@ -35,7 +35,7 @@ public class Livro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Column(nullable = false, columnDefinition = "boolean default false") //como um campo da classe vai virar um coluna no BD
     private boolean reservado;
 
     @Column(nullable = false, length = 100)
@@ -99,7 +99,7 @@ public class Livro {
         this.edicao = edicao;
     }
 
-    // Método toString para facilitar debugging
+    //criado esse metodo para facilitar a depuração no console e verificar como os dados estao se comportando
     @Override
     public String toString() {
         return "Livro{" +
