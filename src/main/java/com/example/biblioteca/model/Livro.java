@@ -50,6 +50,9 @@ public class Livro {
     @Column(nullable = false)
     private int edicao;
 
+    @OneToOne
+    private Reserva reserva;
+
     // Getters e Setters
     public Long getId() {
         return id;
@@ -110,5 +113,9 @@ public class Livro {
                 ", edicao=" + edicao +
                 ", reservado=" + reservado +
                 '}';
+    }
+
+    public void setReserva(Object o) {
+
     }
 }

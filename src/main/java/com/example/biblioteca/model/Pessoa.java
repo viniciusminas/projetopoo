@@ -1,5 +1,8 @@
 package com.example.biblioteca.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "pessoas")
@@ -17,6 +20,11 @@ public class Pessoa {
     private String tel;
     @Column(nullable = false, length = 200)
     private String endereco;
+
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
+    @JsonIgnore // Adicione esta linha
+    private List<Reserva> reservas;
+
 
     public Pessoa(){ //o JPA exige um construtor vazio para converter uma linha do banco de dados para um objeto Java.
     }
@@ -60,6 +68,14 @@ public class Pessoa {
         this.endereco = endereco;
     }
 
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
+    }
+
     public String toSpring(){
         return "Pessoa{" +
                 "id=" + id +
@@ -69,4 +85,5 @@ public class Pessoa {
                 ", endereco=" + endereco +
                 '}';
     }
+
 }
