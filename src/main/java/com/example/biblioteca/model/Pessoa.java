@@ -22,11 +22,11 @@ public class Pessoa {
     private String endereco;
 
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
-    @JsonIgnore // Adicione esta linha
+    @JsonIgnore
     private List<Reserva> reservas;
 
 
-    public Pessoa(){ //o JPA exige um construtor vazio para converter uma linha do banco de dados para um objeto Java.
+    public Pessoa(){
     }
 
     public Pessoa(String nome, String email, String tel, String endereco) {

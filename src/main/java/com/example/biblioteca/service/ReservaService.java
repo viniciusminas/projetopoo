@@ -27,7 +27,6 @@ public class ReservaService {
     @Autowired
     private PessoaRepository pessoaRepository;
 
-    // Create
     @Transactional
     public Reserva criarReserva(ReservaDTO reservaDTO) {
         Optional<Livro> livroOptional = livroRepository.findById(reservaDTO.getLivroId());
@@ -51,7 +50,6 @@ public class ReservaService {
         reserva.setLivro(livro);
         reserva.setPessoa(pessoa);
         reserva.setDataIni(LocalDateTime.now());
-        // dataFim será calculada automaticamente pelo @PrePersist
 
         livro.setReservado(true);
         livro.setReserva(reserva);
@@ -59,7 +57,6 @@ public class ReservaService {
         return reservaRepository.save(reserva);
     }
 
-    // Read (métodos existentes permanecem iguais)
     public List<Reserva> listarTodasReservas() {
         return reservaRepository.findAll();
     }
@@ -72,7 +69,6 @@ public class ReservaService {
         return reservaRepository.findByLivroId(livroId);
     }
 
-    // Update
     @Transactional
     public Reserva atualizarReserva(Long id, ReservaDTO reservaDTO) {
         Optional<Reserva> reservaOptional = reservaRepository.findById(id);
@@ -82,7 +78,6 @@ public class ReservaService {
 
         Reserva reserva = reservaOptional.get();
 
-        // Atualiza apenas os campos permitidos
         if (reservaDTO.getLivroId() != null) {
             Optional<Livro> livroOptional = livroRepository.findById(reservaDTO.getLivroId());
             if (livroOptional.isPresent()) {
@@ -100,7 +95,6 @@ public class ReservaService {
         return reservaRepository.save(reserva);
     }
 
-    // Delete (método existente permanece igual)
     @Transactional
     public void cancelarReserva(Long id) {
         Optional<Reserva> reservaOptional = reservaRepository.findById(id);

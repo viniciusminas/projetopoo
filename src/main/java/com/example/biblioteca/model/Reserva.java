@@ -32,7 +32,6 @@ public class Reserva {
         this.dataIni = LocalDateTime.now();
     }
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }
