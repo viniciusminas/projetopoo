@@ -18,6 +18,8 @@ public class Pessoa {
     @Column(nullable = false, length = 200)
     private String endereco;
 
+    public Pessoa(){ //o JPA exige um construtor vazio para converter uma linha do banco de dados para um objeto Java.
+    }
 
     public Pessoa(String nome, String email, String tel, String endereco) {
         this.nome = nome;
