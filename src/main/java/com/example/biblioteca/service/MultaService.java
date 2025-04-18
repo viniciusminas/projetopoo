@@ -21,17 +21,37 @@ public class MultaService {
     private PessoaRepository pessoaRepository;
 
     public Multa criarMulta(MultaDTO dto) {
-        Pessoa pessoa = pessoaRepository.findById(dto.getPessoaId())
-                .orElseThrow(() -> new IllegalArgumentException("Pessoa não encontrada"));
+        try {
+            Pessoa pessoa = pessoaRepository.findById(dto.getPessoaId())
+                    .orElseThrow(() -> new IllegalArgumentException("Pessoa não encontrada com ID: " + dto.getPessoaId()));
 
-        Multa multa = new Multa();
-        multa.setValor(dto.getValor());
-        multa.setDescricao(dto.getDescricao());
-        multa.setDataMulta(dto.getDataMulta());
-        multa.setPago(dto.isPago());
-        multa.setPessoa(pessoa);
+            Multa multa = new Multa();
+            multa.setValor(dto.getValor());
+            multa.setDescricao(dto.getDescricao());
+            multa.setDataMulta(dto.getDataMulta());
+            multa.setPago(dto.isPago());
+            multa.setPessoa(pessoa);
 
-        return multaRepository.save(multa);
+            return multaRepository.save(multa);
+
+        } catch (IllegalArgumentException e) {
+            throw e; // ir para o Controller e tratar como 400 Bad Request
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar multa: " + e.getMessage(), e);
+        }
+    }
+
+    public void removerMulta(Long id) {
+        try {
+            if (!multaRepository.existsById(id)) {
+                throw new IllegalArgumentException("Multa com ID " + id + " não encontrada.");
+            }
+            multaRepository.deleteById(id);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao remover multa: " + e.getMessage(), e);
+        }
     }
 
     public List<Multa> listarMultas() {
@@ -42,7 +62,4 @@ public class MultaService {
         return multaRepository.findById(id);
     }
 
-    public void removerMulta(Long id) {
-        multaRepository.deleteById(id);
-    }
 }

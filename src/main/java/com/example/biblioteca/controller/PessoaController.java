@@ -1,8 +1,9 @@
 package com.example.biblioteca.controller;
 
 import com.example.biblioteca.model.Pessoa;
-import com.example.biblioteca.repository.PessoaRepository;
+import com.example.biblioteca.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,26 +13,33 @@ import java.util.List;
 public class PessoaController {
 
     @Autowired
-    private PessoaRepository pessoaRepository;
+    private PessoaService pessoaService;
 
     @GetMapping
-    public List<Pessoa> listarPessoas() {
-        return pessoaRepository.findAll();
+    public ResponseEntity<List<Pessoa>> listarPessoas() {
+        return ResponseEntity.ok(pessoaService.listarTodas());
     }
 
     @PostMapping
-    public Pessoa adicionarPessoa(@RequestBody Pessoa pessoa) {
-        return pessoaRepository.save(pessoa);
+    public ResponseEntity<?> adicionarPessoa(@RequestBody Pessoa pessoa) {
+        try {
+            Pessoa salva = pessoaService.salvarPessoa(pessoa);
+            return ResponseEntity.ok(salva);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public Pessoa buscarPessoa(@PathVariable Long id) {
-        return pessoaRepository.findById(id).orElse(null);
+    public ResponseEntity<Pessoa> buscarPessoa(@PathVariable Long id) {
+        return pessoaService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public String removerPessoa(@PathVariable Long id) {
-        pessoaRepository.deleteById(id);
-        return "Pessoa removida com sucesso!";
+    public ResponseEntity<String> removerPessoa(@PathVariable Long id) {
+        pessoaService.removerPessoa(id);
+        return ResponseEntity.ok("Pessoa removida com sucesso!");
     }
 }

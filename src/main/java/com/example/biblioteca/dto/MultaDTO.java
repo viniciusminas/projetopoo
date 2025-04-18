@@ -11,7 +11,6 @@ public class MultaDTO {
     private boolean pago;
     private Long pessoaId;
 
-    // Getters e Setters
     public BigDecimal getValor() {
         return valor;
     }

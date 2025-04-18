@@ -22,7 +22,6 @@ public class Livro {
         this.edicao = edicao;
     }
 
-    // Construtor para criação de novos livros
     public Livro(String titulo, String autor, int ano, int edicao) {
         this.titulo = titulo;
         this.autor = autor;
