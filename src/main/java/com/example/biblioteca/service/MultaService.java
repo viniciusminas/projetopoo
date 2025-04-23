@@ -5,11 +5,17 @@ import com.example.biblioteca.model.Multa;
 import com.example.biblioteca.model.Pessoa;
 import com.example.biblioteca.repository.MultaRepository;
 import com.example.biblioteca.repository.PessoaRepository;
+import com.example.biblioteca.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+/*
+@Autowired
+private ReservaRepository reservaRepository;*/
+
 
 @Service
 public class MultaService {
@@ -19,6 +25,9 @@ public class MultaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     public Multa criarMulta(MultaDTO dto) {
         try {
@@ -32,10 +41,19 @@ public class MultaService {
             multa.setPago(dto.isPago());
             multa.setPessoa(pessoa);
 
+            if (dto.getReservaId() != null) {
+                reservaRepository.findById(dto.getReservaId()).ifPresentOrElse(
+                        multa::setReserva,
+                        () -> {
+                            throw new IllegalArgumentException("Reserva não encontrada com ID: " + dto.getReservaId());
+                        }
+                );
+            }
+
             return multaRepository.save(multa);
 
         } catch (IllegalArgumentException e) {
-            throw e; // ir para o Controller e tratar como 400 Bad Request
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao criar multa: " + e.getMessage(), e);
         }
@@ -61,5 +79,4 @@ public class MultaService {
     public Optional<Multa> buscarMulta(Long id) {
         return multaRepository.findById(id);
     }
-
 }

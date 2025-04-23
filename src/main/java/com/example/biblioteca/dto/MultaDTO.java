@@ -10,6 +10,8 @@ public class MultaDTO {
     private LocalDate dataMulta;
     private boolean pago;
     private Long pessoaId;
+    private Long reservaId; // getter e setter também
+
 
     public BigDecimal getValor() {
         return valor;
@@ -50,4 +52,13 @@ public class MultaDTO {
     public void setPessoaId(Long pessoaId) {
         this.pessoaId = pessoaId;
     }
+
+    public Long getReservaId() {
+        return reservaId;
+    }
+
+    public void setReservaId(Long reservaId) {
+        this.reservaId = reservaId;
+    }
+
 }

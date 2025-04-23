@@ -27,6 +27,10 @@ public class Multa {
     @JoinColumn(name = "pessoa_id", nullable = false)
     private Pessoa pessoa;
 
+    @ManyToOne
+    @JoinColumn(name = "reserva_id", nullable = true) // nullable = true para manter compatibilidade
+    private Reserva reserva;
+
     public Multa() {
     }
 
@@ -90,5 +94,9 @@ public class Multa {
 
     public void setData(LocalDate data) {
 
+    }
+
+    public void setReserva(Reserva reserva) {
+        this.reserva = reserva;
     }
 }
