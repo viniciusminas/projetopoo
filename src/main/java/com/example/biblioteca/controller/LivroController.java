@@ -2,7 +2,10 @@ package com.example.biblioteca.controller;
 
 import com.example.biblioteca.model.Livro;
 import com.example.biblioteca.repository.LivroRepository;
+import com.example.biblioteca.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +16,9 @@ public class LivroController {
 
     @Autowired
     private LivroRepository livroRepository;
+
+    @Autowired
+    private LivroService livroService;
 
     @GetMapping
     public List<Livro> listarLivros() {
@@ -36,7 +42,6 @@ public class LivroController {
             livro.setReservado(true);
             livroRepository.save(livro);
 
-            //APENAS TESTE
             System.out.println("Livro reservado com sucesso!" + livro);
         } else if (livro != null && livro.isReservado()) {
             System.out.println("Livro já estava reservado: " + livro);
@@ -57,8 +62,14 @@ public class LivroController {
     }
 
     @DeleteMapping("/{id}")
-    public String removerLivro(@PathVariable Long id) {
-        livroRepository.deleteById(id);
-        return "Livro removido com sucesso!";
+    public ResponseEntity<?> removerLivro(@PathVariable Long id) {
+        try {
+            livroService.removerLivro(id);
+            return ResponseEntity.ok("Livro removido com sucesso!");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao remover o livro.");
+        }
     }
 }

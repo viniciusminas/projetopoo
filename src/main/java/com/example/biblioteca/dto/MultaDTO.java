@@ -10,7 +10,7 @@ public class MultaDTO {
     private LocalDate dataMulta;
     private boolean pago;
     private Long pessoaId;
-    private Long reservaId; // getter e setter também
+    private Long reservaId;
 
 
     public BigDecimal getValor() {

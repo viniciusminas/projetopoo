@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/*
+/* bkp
 @Autowired
 private ReservaRepository reservaRepository;*/
 
@@ -58,6 +58,36 @@ public class MultaService {
             throw new RuntimeException("Erro ao criar multa: " + e.getMessage(), e);
         }
     }
+
+    public Multa atualizarMulta(Long id, MultaDTO dto) {
+        Multa multa = multaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Multa com ID " + id + " não encontrada."));
+
+        multa.setValor(dto.getValor());
+        multa.setDescricao(dto.getDescricao());
+        multa.setDataMulta(dto.getDataMulta());
+        multa.setPago(dto.isPago());
+
+        if (dto.getPessoaId() != null) {
+            Pessoa pessoa = pessoaRepository.findById(dto.getPessoaId())
+                    .orElseThrow(() -> new IllegalArgumentException("Pessoa não encontrada com ID: " + dto.getPessoaId()));
+            multa.setPessoa(pessoa);
+        }
+
+        if (dto.getReservaId() != null) {
+            reservaRepository.findById(dto.getReservaId()).ifPresentOrElse(
+                    multa::setReserva,
+                    () -> {
+                        throw new IllegalArgumentException("Reserva não encontrada com ID: " + dto.getReservaId());
+                    }
+            );
+        } else {
+            multa.setReserva(null); // permite remover a associação com reserva, se enviado null
+        }
+
+        return multaRepository.save(multa);
+    }
+
 
     public void removerMulta(Long id) {
         try {

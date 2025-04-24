@@ -7,12 +7,12 @@ import jakarta.persistence.*;
 
 public class Livro {
 
-    // Construtor padrão obrigatório para JPA
+    //padrão obrigatório para JPA
     public Livro() {
         this.reservado = false;
     }
 
-    // Construtor com todos os campos
+    //c todos os campos
     public Livro(Long id, boolean reservado, String titulo, String autor, int ano, int edicao) {
         this.id = id;
         this.reservado = reservado;
@@ -52,7 +52,6 @@ public class Livro {
     @OneToOne
     private Reserva reserva;
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }

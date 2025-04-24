@@ -4,7 +4,6 @@ public class ReservaDTO {
     private Long livroId;
     private Long pessoaId;
 
-    // Getters e Setters
     public Long getLivroId() {
         return livroId;
     }

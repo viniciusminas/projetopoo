@@ -33,6 +33,18 @@ public class MultaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Multa> atualizarMulta(@PathVariable Long id, @RequestBody MultaDTO multaDTO) {
+        try {
+            Multa multaAtualizada = multaService.atualizarMulta(id, multaDTO);
+            return ResponseEntity.ok(multaAtualizada);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removerMulta(@PathVariable Long id) {
         multaService.removerMulta(id);
