@@ -30,6 +30,18 @@ public class PessoaController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> alterarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) {
+        try {
+            pessoa.setId(id);
+            Pessoa salva = pessoaService.salvarPessoa(pessoa);
+            return ResponseEntity.ok(salva);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<Pessoa> buscarPessoa(@PathVariable Long id) {
         return pessoaService.buscarPorId(id)

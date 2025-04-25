@@ -27,4 +27,18 @@ public class LivroService {
 
         livroRepository.deleteById(id);
     }
+
+    public Livro atualizarLivro(Long id, Livro livroAtualizado) {
+        Livro existente = livroRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Livro com ID " + id + " não encontrado."));
+
+        existente.setTitulo(livroAtualizado.getTitulo());
+        existente.setAutor(livroAtualizado.getAutor());
+        existente.setAno(livroAtualizado.getAno());
+        existente.setEdicao(livroAtualizado.getEdicao());
+        existente.setReservado(livroAtualizado.isReservado());
+
+        return livroRepository.save(existente);
+    }
+
 }

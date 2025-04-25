@@ -35,6 +35,16 @@ public class LivroController {
         return livroRepository.findById(id).orElse(null);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> atualizarLivro(@PathVariable Long id, @RequestBody Livro livroAtualizado) {
+        try {
+            Livro atualizado = livroService.atualizarLivro(id, livroAtualizado);
+            return ResponseEntity.ok(atualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @PutMapping("/{id}/reservar")
     public Livro reservarLivro(@PathVariable Long id) {
         Livro livro = livroRepository.findById(id).orElse(null);
