@@ -19,13 +19,11 @@ public class PessoaService {
         Pessoa pessoaExistente = pessoaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Pessoa não encontrada"));
 
-        // Verificar se o email está em uso por outra pessoa
         Optional<Pessoa> pessoaPorEmail = pessoaRepository.findByEmail(pessoaAtualizada.getEmail());
         if (pessoaPorEmail.isPresent() && !pessoaPorEmail.get().getId().equals(id)) {
             throw new IllegalArgumentException("Email já está em uso.");
         }
 
-        // Verificar se o telefone está em uso por outra pessoa
         Optional<Pessoa> pessoaPorTelefone = pessoaRepository.findByTel(pessoaAtualizada.getTel());
         if (pessoaPorTelefone.isPresent() && !pessoaPorTelefone.get().getId().equals(id)) {
             throw new IllegalArgumentException("Telefone já está em uso.");
@@ -40,14 +38,12 @@ public class PessoaService {
 
 
     public Pessoa salvarPessoa(Pessoa pessoa) {
-        // verifica se o email está em uso por outra pessoa
         pessoaRepository.findByEmail(pessoa.getEmail()).ifPresent(existing -> {
             if (!existing.getId().equals(pessoa.getId())) {
                 throw new IllegalArgumentException("Email ou telefone já está em uso.");
             }
         });
 
-        // verifica se o telefone está em uso por outra pessoa
         pessoaRepository.findByTel(pessoa.getTel()).ifPresent(existing -> {
             if (!existing.getId().equals(pessoa.getId())) {
                 throw new IllegalArgumentException("Email ou telefone já está em uso.");
