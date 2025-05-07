@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -31,11 +32,21 @@ public class PessoaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> alterarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) {
+    public ResponseEntity<?> alterarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoaAtualizada) {
+        Optional<Pessoa> pessoaExistente = pessoaService.buscarPorId(id);
+        if (pessoaExistente.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Pessoa pessoa = pessoaExistente.get();
+        pessoa.setNome(pessoaAtualizada.getNome());
+        pessoa.setEndereco(pessoaAtualizada.getEndereco());
+        // Apenas sobrescreve se vier valor
+        if (pessoaAtualizada.getEmail() != null) pessoa.setEmail(pessoaAtualizada.getEmail());
+        if (pessoaAtualizada.getTel() != null) pessoa.setTel(pessoaAtualizada.getTel());
+
         try {
-            pessoa.setId(id);
-            Pessoa salva = pessoaService.salvarPessoa(pessoa);
-            return ResponseEntity.ok(salva);
+            return ResponseEntity.ok(pessoaService.salvarPessoa(pessoa));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
