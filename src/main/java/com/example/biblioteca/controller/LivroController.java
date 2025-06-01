@@ -21,9 +21,23 @@ public class LivroController {
     private LivroService livroService;
 
     @GetMapping
-    public List<Livro> listarLivros() {
-        return livroRepository.findAll();
+    public List<Livro> listarLivros(
+            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) String autor,
+            @RequestParam(required = false) Integer ano) {
+
+        if (titulo != null && !titulo.isEmpty()) {
+            return livroRepository.findByTituloContainingIgnoreCase(titulo);
+        } else if (autor != null && !autor.isEmpty()) {
+            return livroRepository.findByAutorContainingIgnoreCase(autor);
+        } else if (ano != null) {
+            return livroRepository.findByAno(ano);
+        } else {
+            return livroRepository.findAll();
+        }
     }
+
+
 
     @PostMapping
     public Livro adicionarLivro(@RequestBody Livro livro) {
